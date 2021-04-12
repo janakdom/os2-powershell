@@ -2,7 +2,7 @@
 
 # set this value to 1 for local debugging
 [bool] $DEBUG = 0;
-$allowed = '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+$allowed = "0123456789abcdefghijklmnopqrstuvwxyz"
 
 
 Function Convert-Base {
@@ -210,7 +210,7 @@ param (
     }
 
     $minBase = 2
-    $maxBase = $allowed.Count + 1;
+    $maxBase = $allowed.Length + 1;
 
     if (-not ($sourceBase -ge $minBase -and $sourceBase -le $maxBase)) {
         Write-Host -ForegroundColor Red "Source base is not in allowed range <$minBase, $maxBase>!"
