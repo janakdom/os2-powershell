@@ -23,6 +23,7 @@ Použité přepínače:
   - `-i` interkaktivní mód
   - `-v` ukecaný mód
   - `-big` velké znaky výstupu
+  - `-t` zobrazí celkový čas výpočtu (Pozor na mód verbose)
 
 ## Nápověda
 
@@ -40,6 +41,7 @@ Options:
                    You will be asked to write required arguments during runtime.
     -v             Verbose mode. Shows calculation steps.
     -big           Show output uppercase.
+	-t             Show computing time in milliseconds.
 ```
 
 ## Instalace

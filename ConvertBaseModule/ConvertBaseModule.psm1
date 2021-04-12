@@ -32,7 +32,10 @@ param (
     [switch]$i,
 
     [Parameter(Mandatory=$false, HelpMessage="Show output uppercase.")] 
-    [switch]$big
+    [switch]$big,
+
+    [Parameter(Mandatory=$false, HelpMessage="Show computing time in milliseconds.")] 
+    [switch]$t
 )
     # Validate input.
     $validationResult = Validate-Input-Parameters -n $n -bs $bs -bt $bt -r $r -i $i
@@ -50,6 +53,8 @@ param (
     [int]$targetBase = $realParameters[2]
 
     Write-Verbose "Converting number '$number' from '$sourceBase' to '$targetBase' base:"
+    
+    $startMs = (Get-Date).Millisecond
 
     [string]$result = Convert-Number -number $number -from $sourceBase -to $targetBase
     
@@ -57,7 +62,14 @@ param (
         $result = $result.ToUpper()
     }
 
+    $endMs = (Get-Date).Millisecond
+
     Write-Verbose "Result is '$result'"
+
+    if ($t) {
+        Write-Host -ForegroundColor Yellow "This script took $($endMs - $startMs) miliseconds to run"
+    }
+        
     Write-Verbose "DONE"
 
     return $result
