@@ -1,6 +1,9 @@
+#Import-Module -Verbose D:\Develop\PowerShell\os2-powershell\ConvertBaseModule\ConvertBaseModule.psm1
 
-# set this to 1 for local debug
+# set this value to 1 for local debugging
 [bool] $DEBUG = 0;
+$allowed = '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+
 
 Function Convert-Base {
 [CmdletBinding()]
@@ -43,11 +46,63 @@ param (
     [int]$sourceBase = $realParameters[1]
     [int]$targetBase = $realParameters[2]
 
-    # TODO: Real implementation!
-    Print-Result "Hello world $number $sourceBase $targetBase" -big $big
+    Write-Host "Converting number '$number' from '$sourceBase' to '$targetBase' base:"
+
+    [string]$result = Convert-Number -number $number -from $sourceBase -to $targetBase
     
-    Write-Verbose 'Verbose output'
+    if ($big -and $result -ne $null) {
+        $result = $result.ToUpper()
+    }
+    Write-Host $result
 }
+
+
+function Convert-Number {
+    param (
+        [string]$number,
+        [int]$from,
+        [int]$to
+    )
+
+    if ($sourceBase -eq $targetBase) {
+        Write-Verbose "No convert, same bases"
+        return $number;
+    } 
+    elseif ($sourceBase -eq 10) {
+        Write-Verbose "Converting only from 10 base"
+        return Convert-FromDec -number $number -to $targetBase
+    } 
+    elseif($targetBase -eq 10) {
+        Write-Verbose "Converting only to 10 base"
+        return Convert-ToDec -number $number -from $sourceBase
+    } 
+    else {
+        Write-Verbose "Converting through 10 base"
+        [string]$decNum = Convert-ToDec -number $number -from $sourceBase
+        return Convert-FromDec -number $decNum -to $targetBase
+    }
+}
+
+Function Convert-ToDec {
+    param (
+        [string]$number,
+        [int]$from
+    )
+
+    #TODO: Convert number to dec
+    Write-Host "toDec"
+}
+
+Function Convert-FromDec {
+    param (
+        [string]$number,
+        [int]$to
+    )
+
+    #TODO: Convert number from dec
+    Write-Host "fromDec"
+}
+
 
 Function Validate-Input-Parameters {
 [OutputType([string])] # Return error message if validation fails, if it passes return null
@@ -85,6 +140,8 @@ param (
 Check help for details.'
         }
     }
+
+    #TODO validate bases and input number to corresponds to the source base
 
     return $null
 }
@@ -159,22 +216,19 @@ param (
     $targetBase
 }
 
-Function Print-Result {
-param (
-    [Parameter(Mandatory=$true, HelpMessage="Text to print.")] 
-    [string]$text,
-
-    [Parameter(Mandatory=$false, HelpMessage="Show output uppercase.")] 
-    [bool]$big
-)
-    if ($big) {
-        $text = $text.ToUpper()
-    }
-    Write-Host $text
-} 
-
 Function Run-Tests {
-    Convert-Base -r '20 10 16'
+    Write-Host "Reference value: FF"
+    Convert-Base -r '255 10 16' -big
+
+    Write-Host "Reference value: 255"
+    Convert-Base -r 'FF 16 10' -big
+    
+    
+    Write-Host "Reference value: 255"
+    Convert-Base -r '10101010 2 16' -big
+    
+    Write-Host "Reference value: FF"
+    Convert-Base -r 'ff 16 16' -big
 } 
 
 if( $DEBUG -eq "True") {
@@ -182,4 +236,3 @@ if( $DEBUG -eq "True") {
 } else {
     Export-ModuleMember -Function Convert-Base
 }
-Convert-Base -r '20 10 16'
