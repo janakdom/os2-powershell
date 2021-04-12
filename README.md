@@ -39,3 +39,7 @@ Options:
     -v             Verbose mode. Shows calculation steps.
     -big           Show output uppercase.
 ```
+
+## Autoři
+
+Dominik Janák, Tomáš Křičenský
