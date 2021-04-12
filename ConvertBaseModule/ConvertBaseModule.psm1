@@ -208,12 +208,16 @@ param (
         Write-Host -ForegroundColor Red 'Number uses invalid characters for its base!'
         return $null
     }
-    if (-not ($sourceBase -ge 2 -and $num -le 36)) {
-        Write-Host -ForegroundColor Red 'Source base is not in allowed range <2, 36>!'
+
+    $minBase = 2
+    $maxBase = $allowed.Count + 1;
+
+    if (-not ($sourceBase -ge $minBase -and $sourceBase -le $maxBase)) {
+        Write-Host -ForegroundColor Red "Source base is not in allowed range <$minBase, $maxBase>!"
         return $null
     }
-    if (-not ($targetBase -ge 2 -and $num -le 36)) {
-        Write-Host -ForegroundColor Red 'Target base is not in allowed range <2, 36>!'
+    if (-not ($targetBase -ge $minBase -and $targetBase -le $maxBase)) {
+        Write-Host -ForegroundColor Red "Target base is not in allowed range <$minBase, $maxBase>!"
         return $null
     }
 
