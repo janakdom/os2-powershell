@@ -1,6 +1,6 @@
 # Převodník číselných soustav
 
-CommandLet (Convert-Base) pro: převodník bude umožňovat převádět libovolnou číslenou 
+CommandLet (Convert-Base): převodník bude umožňovat převádět libovolnou číslenou 
 soustavu do libovolné číselké soustavy (2 - 36), nikoliv jen mezi základními (2, 8, 10, 16).
 
 ## Motivace: 
