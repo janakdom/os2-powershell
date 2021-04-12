@@ -50,7 +50,7 @@ param (
 
     [string]$result = Convert-Number -number $number -from $sourceBase -to $targetBase
     
-    if ($big -and $result -ne $null) {
+    if ($big -and (-not [string]::IsNullOrEmpty($result))) {
         $result = $result.ToUpper()
     }
     Write-Host $result
@@ -79,13 +79,18 @@ function Convert-Number {
     else {
         Write-Verbose "Converting through 10 base"
         [string]$decNum = Convert-ToDec -number $number -from $sourceBase
-        return Convert-FromDec -number $decNum -to $targetBase
+        if(-not [string]::IsNullOrEmpty($decNum)) {
+            return Convert-FromDec -number $decNum -to $targetBase
+        }
+        return $null
     }
 }
 
 Function Convert-ToDec {
     param (
+        [Parameter(Mandatory=$true)] 
         [string]$number,
+        [Parameter(Mandatory=$true)] 
         [int]$from
     )
 
@@ -95,7 +100,9 @@ Function Convert-ToDec {
 
 Function Convert-FromDec {
     param (
+        [Parameter(Mandatory=$true)] 
         [string]$number,
+        [Parameter(Mandatory=$true)] 
         [int]$to
     )
 
