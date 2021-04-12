@@ -7,11 +7,13 @@ param (
     [Parameter(Mandatory=$false, HelpMessage="Number to convert.")] 
     [string]$n,
 
-    [Parameter(Mandatory=$false, HelpMessage="Input number base.")] 
-    [int]$bs,
+    [Parameter(Mandatory=$false, HelpMessage="Input number base.")]
+    [AllowNull()]
+    [Nullable[System.Int32]]$bs,
 
-    [Parameter(Mandatory=$false, HelpMessage="Output number base.")] 
-    [int]$bt,
+    [Parameter(Mandatory=$false, HelpMessage="Output number base.")]
+    [AllowNull()]
+    [Nullable[System.Int32]]$bt,
 
     [Parameter(Mandatory=$false, HelpMessage="Simple raw input (-r 'FF 16 10').")] 
     [string]$r,
@@ -41,7 +43,7 @@ param (
     [int]$targetBase = $realParameters[2]
 
     # TODO: Real implementation!
-    Print-Result [Convert]::ToString($number, $targetBase) -big $big
+    Print-Result "Hello world $number $sourceBase $targetBase" -big $big
 }
 
 Function Validate-Input-Parameters {
@@ -50,11 +52,13 @@ param (
     [Parameter(Mandatory=$false, HelpMessage="Number to convert.")] 
     [string]$n,
 
-    [Parameter(Mandatory=$false, HelpMessage="Input number base.")] 
-    [int]$bs,
+    [Parameter(Mandatory=$false, HelpMessage="Input number base.")]
+    [AllowNull()]
+    [Nullable[System.Int32]]$bs,
 
-    [Parameter(Mandatory=$false, HelpMessage="Output number base.")] 
-    [int]$bt,
+    [Parameter(Mandatory=$false, HelpMessage="Output number base.")]
+    [AllowNull()]
+    [Nullable[System.Int32]]$bt,
 
     [Parameter(Mandatory=$false, HelpMessage="Simple raw input (-r 'FF 16 10').")] 
     [string]$r,
@@ -107,17 +111,17 @@ param (
     
     # Raw input enabled.
     if (-not [string]::IsNullOrEmpty($r)) {
-        $raw = $r.Split(' ')
+        [System.Object[]]$raw = $r.Split(' ')
         [string]$rawNumber = $raw[0]
         [string]$rawSourceBase = $raw[1]
         [string]$rawTargetBase = $raw[2]
-
-        if (-not [Helpers]::IsNumeric($rawSourceBase)) {
+         
+        if ($rawSourceBase -notmatch '^\d+$') {
             Write-Host -ForegroundColor Red 'Source base is not a number!'
             return $null
         }
 
-        if (-not [Helpers]::IsNumeric($rawTargetBase)) {
+        if ($rawTargetBase -notmatch '^\d+$') {
             Write-Host -ForegroundColor Red 'Target base is not a number!'
             return $null
         }
@@ -126,7 +130,7 @@ param (
         $sourceBase = $rawSourceBase
         $targetBase = $rawTargetBase
 
-    } elsif ($i) {
+    } elseif ($i) {
         # TODO Interactive input + flags.
     } else {
         # TODO: Input from flags only.
@@ -152,7 +156,7 @@ param (
     $targetBase
 }
 
-Function Write-Result {
+Function Print-Result {
 param (
     [Parameter(Mandatory=$true, HelpMessage="Text to print.")] 
     [string]$text,
@@ -166,4 +170,4 @@ param (
     Write-Host $text
 } 
 
-Convert-Base -r '16 10 16'
+Convert-Base -r '20 10 16'
