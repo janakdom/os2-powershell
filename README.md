@@ -42,6 +42,14 @@ Options:
     -big           Show output uppercase.
 ```
 
+## Instalace
+
+```powershell
+$CurrentValue = [Environment]::GetEnvironmentVariable("PSModulePath", "Machine")
+[Environment]::SetEnvironmentVariable("PSModulePath", $CurrentValue + [System.IO.Path]::PathSeparator + "C:\Path\To\This\Repository", "Machine")
+```
+
+
 ## Autoři
 
 Dominik Janák, Tomáš Křičenský
