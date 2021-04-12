@@ -44,6 +44,8 @@ param (
         return
     }
 
+    # ASI BY BYLO LEPŠÍ PRVNĚ PARSOVAT(INTERAKTIVNĚ NAČÍTAT) A POTOM TO NAPARSOVANÉ ZVALIDOVAT, U RAWU JINAK BUDEME PARSOVAT 2X :)
+
     $realParameters = Parse-Parameters -n $n -bs $bs -bt $bt -r $r -i $i
     if ($realParameters -eq $null) {
         return
@@ -202,7 +204,11 @@ param (
             return 'Do not use other input methods while using RAW input!'
         }
 
-        # TODO: Validate Raw input string.
+        # TODO: GET NUMBER AND INPUT BASE
+        #for ($position = 0; $position -lt $n.Length; $position++) {
+        #    $char = $n.SubString($position, 1)        #    $value = $values[$char];        #        #    if($value -ge $bs) {        #        return "Input number is not valid for input base '$bs'`nProblem with '$char' at postition $($position+1)"        #    }
+        # 
+        #}
     }
 
     # Interactive mode disabled - require all arguments.
@@ -213,8 +219,7 @@ Check help for details.'
         }
     }
 
-    #TODO validate bases and input number to corresponds to the source base
-
+    Write-Verbose "Input validation success."
     return $null
 }
 

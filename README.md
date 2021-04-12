@@ -29,7 +29,8 @@ Použité přepínače:
 
 ```powershell
 Usage: Convert-Base [-h] [-n number] [-bs source_base] [-bt target_base]
-                    [-r number source_base target_base] [-i] [-v] [-big]
+                    [-r number source_base target_base] [-i] [-Verbose]
+					[-t] [-big]
 
 Options:
     -h             Show help.
@@ -39,9 +40,9 @@ Options:
     -r             Simple raw input (-r "FF 16 10").
     -i             Interactive input mode. 
                    You will be asked to write required arguments during runtime.
-    -v             Verbose mode. Shows calculation steps.
+    -Verbose       Verbose mode. Shows calculation steps.
     -big           Show output uppercase.
-	-t             Show computing time in milliseconds.
+    -t             Show computing time in milliseconds.
 ```
 
 ## Instalace
