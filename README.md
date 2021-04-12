@@ -1,9 +1,11 @@
 # Převodník číselných soustav
 
 CommandLet (Convert-Base): převodník bude umožňovat převádět libovolnou číslenou 
-soustavu do libovolné číselké soustavy (2 - 36), nikoliv jen mezi základními (2, 8, 10, 16).
+soustavu do libovolné číselné soustavy (2 - 36), nikoliv jen mezi základními (2, 8, 10, 16).
+Pro převod bude využívat 
 
-## Motivace: 
+## Motivace
+
 Většina konvenčních nástrojů neumožňuje převod mezi nekonvenčními soustavami.
 
 ## Funkce
