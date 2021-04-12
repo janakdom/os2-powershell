@@ -35,7 +35,7 @@ Options:
     -n             Number to convert.
     -bs base       Input number base.
     -bt base       Output number base.
-    -r             Simple raw input (-r FF 16 10).
+    -r             Simple raw input (-r "FF 16 10").
     -i             Interactive input mode. 
                    You will be asked to write required arguments during runtime.
     -v             Verbose mode. Shows calculation steps.
