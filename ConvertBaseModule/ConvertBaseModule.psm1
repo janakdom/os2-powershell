@@ -33,7 +33,7 @@ param (
     }
 
     # TODO: BODY!
-    Print-Result 'Hello world' -big $big
+    Write-Result 'Hello world' -big $big
 }
 Function Validate-Input-Parameters {
 [OutputType([string])] # Return error message if validation fails, if it passes return null
@@ -76,7 +76,7 @@ Check help for details.'
 }
 
 
-Function Print-Result {
+Function Write-Result {
 param (
     [Parameter(Mandatory=$true, HelpMessage="Text to print.")] 
     [string]$text,
