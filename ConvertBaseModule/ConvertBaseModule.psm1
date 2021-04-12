@@ -32,9 +32,18 @@ param (
         return
     }
 
-    # TODO: BODY!
-    Write-Result 'Hello world' -big $big
+    $realParameters = Parse-Parameters -n $n -bs $bs -bt $bt -r $r -i $i
+    if ($realParameters -eq $null) {
+        return
+    }
+    [string]$number = $realParameters[0]
+    [int]$sourceBase = $realParameters[1]
+    [int]$targetBase = $realParameters[2]
+
+    # TODO: Real implementation!
+    Print-Result [Convert]::ToString($number, $targetBase) -big $big
 }
+
 Function Validate-Input-Parameters {
 [OutputType([string])] # Return error message if validation fails, if it passes return null
 param (
@@ -55,7 +64,7 @@ param (
 )
     # Raw input enabled.
     if (-not [string]::IsNullOrEmpty($r)) {
-        if ((-not [string]::IsNullOrEmpty($n)) -or (-not [string]::IsNullOrEmpty($bs)) -or (-not [string]::IsNullOrEmpty($bt)) -or $i) {
+        if ((-not [string]::IsNullOrEmpty($n)) -or ($bs -ne $null) -or ($bt  -ne $null) -or $i) {
             return 'Do not use other input methods while using RAW input!'
         }
 
@@ -70,11 +79,78 @@ Check help for details.'
         }
     }
 
-    # TODO: Validate numbers/Input.
-
     return $null
 }
 
+Function Parse-Parameters {
+[OutputType([string], [int], [int])] # Return number, source base and target base in this order (or null if invalid).
+param (
+    [Parameter(Mandatory=$false, HelpMessage="Number to convert.")] 
+    [string]$n,
+
+    [Parameter(Mandatory=$false, HelpMessage="Input number base.")] 
+    [int]$bs,
+
+    [Parameter(Mandatory=$false, HelpMessage="Output number base.")] 
+    [int]$bt,
+
+    [Parameter(Mandatory=$false, HelpMessage="Simple raw input (-r 'FF 16 10').")] 
+    [string]$r,
+
+    [Parameter(Mandatory=$false, HelpMessage="Interactive input mode.")] 
+    [bool]$i
+)
+    [string]$number = $null
+    [int]$sourceBase = $null
+    [int]$targetBase = $null
+
+    
+    # Raw input enabled.
+    if (-not [string]::IsNullOrEmpty($r)) {
+        $raw = $r.Split(' ')
+        [string]$rawNumber = $raw[0]
+        [string]$rawSourceBase = $raw[1]
+        [string]$rawTargetBase = $raw[2]
+
+        if (-not [Helpers]::IsNumeric($rawSourceBase)) {
+            Write-Host -ForegroundColor Red 'Source base is not a number!'
+            return $null
+        }
+
+        if (-not [Helpers]::IsNumeric($rawTargetBase)) {
+            Write-Host -ForegroundColor Red 'Target base is not a number!'
+            return $null
+        }
+        
+        $number = $rawNumber
+        $sourceBase = $rawSourceBase
+        $targetBase = $rawTargetBase
+
+    } elsif ($i) {
+        # TODO Interactive input + flags.
+    } else {
+        # TODO: Input from flags only.
+    }
+
+    # TODO: Validate number in range of base characters.
+    if ($false) {
+        Write-Host -ForegroundColor Red 'Number uses invalid characters for its base!'
+        return $null
+    }
+    if (-not ($sourceBase -ge 2 -and $num -le 36)) {
+        Write-Host -ForegroundColor Red 'Source base is not in allowed range <2, 36>!'
+        return $null
+    }
+    if (-not ($targetBase -ge 2 -and $num -le 36)) {
+        Write-Host -ForegroundColor Red 'Target base is not in allowed range <2, 36>!'
+        return $null
+    }
+
+    # Return 3 values at the end.
+    $number
+    $sourceBase
+    $targetBase
+}
 
 Function Write-Result {
 param (
@@ -90,4 +166,4 @@ param (
     Write-Host $text
 } 
 
-Convert-Base
+Convert-Base -r '16 10 16'
