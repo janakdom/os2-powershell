@@ -170,4 +170,7 @@ param (
     Write-Host $text
 } 
 
+#Dont change this!
+Export-ModuleMember -Function Convert-Base
+
 Convert-Base -r '20 10 16'
