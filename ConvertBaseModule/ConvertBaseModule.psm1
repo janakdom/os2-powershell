@@ -1,3 +1,7 @@
+
+# set this to 1 for local debug
+[bool] $DEBUG = 0;
+
 Function Convert-Base {
 [CmdletBinding()]
 param (
@@ -21,9 +25,6 @@ param (
     [Parameter(Mandatory=$false, HelpMessage="Interactive input mode. You will be asked to write required arguments during runtime.")] 
     [switch]$i,
 
-    [Parameter(Mandatory=$false, HelpMessage="Verbose mode. Shows calculation steps.")] 
-    [switch]$v,
-
     [Parameter(Mandatory=$false, HelpMessage="Show output uppercase.")] 
     [switch]$big
 )
@@ -44,6 +45,8 @@ param (
 
     # TODO: Real implementation!
     Print-Result "Hello world $number $sourceBase $targetBase" -big $big
+    
+    Write-Verbose 'Verbose output'
 }
 
 Function Validate-Input-Parameters {
@@ -170,7 +173,13 @@ param (
     Write-Host $text
 } 
 
-#Dont change this!
-Export-ModuleMember -Function Convert-Base
+Function Run-Tests {
+    Convert-Base -r '20 10 16'
+} 
 
+if( $DEBUG -eq "True") {
+    Run-Tests
+} else {
+    Export-ModuleMember -Function Convert-Base
+}
 Convert-Base -r '20 10 16'
