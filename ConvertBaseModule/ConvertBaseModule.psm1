@@ -1,7 +1,7 @@
-#Import-Module -Verbose D:\Develop\PowerShell\os2-powershell\ConvertBaseModule\ConvertBaseModule.psm1
+﻿#Import-Module -Verbose D:\Develop\PowerShell\os2-powershell\ConvertBaseModule\ConvertBaseModule.psm1
 
 # set this value to 1 for local debugging
-[bool] $DEBUG = 1
+[bool] $DEBUG = 0
 $allowed = "0123456789abcdefghijklmnopqrstuvwxyz"
 #indexes
 $values = @{'0'=0;'1'=1;'2'=2;'3'=3;'4'=4;'5'=5;'6'=6;'7'=7;'8'=8;'9'=9;'a'=10;'b'=11;'c'=12;
@@ -49,14 +49,18 @@ param (
     [int]$sourceBase = $realParameters[1]
     [int]$targetBase = $realParameters[2]
 
-    Write-Host "Converting number '$number' from '$sourceBase' to '$targetBase' base:"
+    Write-Verbose "Converting number '$number' from '$sourceBase' to '$targetBase' base:"
 
     [string]$result = Convert-Number -number $number -from $sourceBase -to $targetBase
     
     if ($big -and (-not [string]::IsNullOrEmpty($result))) {
         $result = $result.ToUpper()
     }
-    Write-Host $result
+
+    Write-Verbose "Result is '$result'"
+    Write-Verbose "DONE"
+
+    return $result
 }
 
 
@@ -80,8 +84,11 @@ function Convert-Number {
         return Convert-ToDec -number $number -from $sourceBase
     } 
     else {
-        Write-Verbose "Converting through 10 base"
+        Write-Verbose "Converting from '$from' through '10' to '$to' base"
         [string]$decNum = Convert-ToDec -number $number -from $sourceBase
+
+        if($DEBUG -eq "True") {            Write-Host -ForegroundColor Yellow "DEC value is '$decNum'"        }
+
         if(-not [string]::IsNullOrEmpty($decNum)) {
             return Convert-FromDec -number $decNum -to $targetBase
         }
@@ -97,8 +104,30 @@ Function Convert-ToDec {
         [int]$from
     )
 
-    #TODO: Convert number to dec
-    Write-Host "toDec"
+    Write-Verbose "Converting from '$from' to '10' base"
+
+    [bigint]$sum = 0
+    [string]$out = ""
+
+    
+    Write-Verbose "(char_value × base^position) + ..."
+
+    for ($position = 0; $position -lt $number.Length; $position++) {
+        $char = $number.SubString($position, 1)        $index = $number.Length-1 - $position        $value = $values[$char];        if($value -ge $from) {            throw "Invalid input value!"        }                if($DEBUG -eq "True") {            Write-Host -ForegroundColor Yellow "Use char '$char' at position '$index' with value '$value'"        }
+
+        $sum += $value * [bigint][math]::pow($from, $index)
+
+        if(-not [string]::IsNullOrEmpty($out)) {
+            $out = "$out + "
+        }
+        
+        $out += "($value × $from^$index)"
+        
+    }
+    Write-Verbose "$out = $sum"
+    Write-Verbose "$number($from) is $sum(10)"
+    
+    return [string]$sum;
 }
 
 Function Convert-FromDec {
@@ -109,8 +138,29 @@ Function Convert-FromDec {
         [int]$to
     )
 
-    #TODO: Convert number from dec
-    Write-Host "fromDec"
+    Write-Verbose "Converting from '10' to '$to' base"
+    Write-Verbose "number / base = floor_divide → remainder (converted_char)"
+
+    [bigint]$num = $number;
+    [string]$out = "";
+
+    while($num -gt 0) {
+        $remainder = $num % $to
+        $divide = [bigint]($num / $to)
+
+        $char = $allowed.Substring($remainder, 1)
+        $out += $char
+
+        Write-Verbose "$num / $to = $divide → $remainder ($char)"
+        $num = $divide
+    }
+
+    $reverse = $out[-1..-$out.Length] -join ''
+    Write-Verbose "'$out' reverse to '$reverse'"
+
+    Write-Verbose "$number(10) is $reverse($to)"
+
+    return $reverse;
 }
 
 
