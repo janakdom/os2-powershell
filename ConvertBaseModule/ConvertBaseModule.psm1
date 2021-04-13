@@ -44,8 +44,6 @@ param (
         return
     }
 
-    # ASI BY BYLO LEPŠÍ PRVNĚ PARSOVAT(INTERAKTIVNĚ NAČÍTAT) A POTOM TO NAPARSOVANÉ ZVALIDOVAT, U RAWU JINAK BUDEME PARSOVAT 2X :)
-
     $realParameters = Parse-Parameters -n $n -bs $bs -bt $bt -r $r -i $i
     if ($realParameters -eq $null) {
         return
@@ -101,7 +99,9 @@ function Convert-Number {
         Write-Verbose "Converting from '$from' through '10' to '$to' base"
         [string]$decNum = Convert-ToDec -number $number -from $sourceBase
 
-        if($DEBUG -eq "True") {            Write-Host -ForegroundColor Yellow "DEC value is '$decNum'"        }
+        if($DEBUG -eq "True") {
+            Write-Host -ForegroundColor Yellow "DEC value is '$decNum'"
+        }
 
         if(-not [string]::IsNullOrEmpty($decNum)) {
             return Convert-FromDec -number $decNum -to $targetBase
@@ -126,7 +126,17 @@ Function Convert-ToDec {
     Write-Verbose "(char_value × base^position) + ..."
 
     for ($position = 0; $position -lt $number.Length; $position++) {
-        $char = $number.SubString($position, 1)        $index = $number.Length-1 - $position        $value = $values[$char];        if($value -ge $from) {            throw "Invalid input value!"        }                if($DEBUG -eq "True") {            Write-Host -ForegroundColor Yellow "Use char '$char' at position '$index' with value '$value'"        }
+		$char = $number.SubString($position, 1)
+		$index = $number.Length-1 - $position
+		$value = $values[$char];
+		
+		if($value -ge $from) {
+			throw "Invalid input value!"
+        }
+        
+        if($DEBUG -eq "True") {
+            Write-Host -ForegroundColor Yellow "Use char '$char' at position '$index' with value '$value'"
+        }
 
         $sum += $value * [bigint][math]::pow($from, $index)
 
@@ -286,8 +296,16 @@ param (
 
     # validate input number
     for ($position = 0; $position -lt $number.Length; $position++) {
-        $char = $number.SubString($position, 1)                #TODO: check if chat is in allowed (maybe hash map [$values[$char]] return null if char not exists)        $value = $values[$char];            if($value -ge $sourceBase) {            Write-Host -ForegroundColor Red "Input number is not valid for input base '$sourceBase'`nProblem with '$char' at postition $($position+1)"            return $null        }
-    }
+		$char = $number.SubString($position, 1)
+		
+		#TODO: check if chat is in allowed (maybe hash map [$values[$char]] return null if char not exists)
+		$value = $values[$char];
+		
+		if($value -ge $sourceBase) {
+			Write-Host -ForegroundColor Red "Input number is not valid for input base '$sourceBase'`nProblem with '$char' at postition $($position+1)"
+			return $null
+		}
+	}
 
     # Return 3 values at the end.
     $number
