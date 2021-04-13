@@ -1,4 +1,4 @@
-﻿#Import-Module -Verbose D:\Develop\PowerShell\os2-powershell\ConvertBaseModule\ConvertBaseModule.psm1
+#Import-Module -Verbose D:\Develop\PowerShell\os2-powershell\ConvertBaseModule\ConvertBaseModule.psm1
 
 # set this value to 1 for local debugging
 [bool] $DEBUG = 0
@@ -123,7 +123,6 @@ Function Convert-ToDec {
     [bigint]$sum = 0
     [string]$out = ""
 
-    
     Write-Verbose "(char_value × base^position) + ..."
 
     for ($position = 0; $position -lt $number.Length; $position++) {
@@ -203,12 +202,6 @@ param (
         if ((-not [string]::IsNullOrEmpty($n)) -or ($bs -ne $null) -or ($bt  -ne $null) -or $i) {
             return 'Do not use other input methods while using RAW input!'
         }
-
-        # TODO: GET NUMBER AND INPUT BASE
-        #for ($position = 0; $position -lt $n.Length; $position++) {
-        #    $char = $n.SubString($position, 1)        #    $value = $values[$char];        #        #    if($value -ge $bs) {        #        return "Input number is not valid for input base '$bs'`nProblem with '$char' at postition $($position+1)"        #    }
-        # 
-        #}
     }
 
     # Interactive mode disabled - require all arguments.
@@ -289,6 +282,11 @@ param (
     if (-not ($targetBase -ge $minBase -and $targetBase -le $maxBase)) {
         Write-Host -ForegroundColor Red "Target base is not in allowed range <$minBase, $maxBase>!"
         return $null
+    }
+
+    # validate input number
+    for ($position = 0; $position -lt $number.Length; $position++) {
+        $char = $number.SubString($position, 1)                #TODO: check if chat is in allowed (maybe hash map [$values[$char]] return null if char not exists)        $value = $values[$char];            if($value -ge $sourceBase) {            Write-Host -ForegroundColor Red "Input number is not valid for input base '$sourceBase'`nProblem with '$char' at postition $($position+1)"            return $null        }
     }
 
     # Return 3 values at the end.
