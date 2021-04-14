@@ -37,6 +37,11 @@ param (
     [Parameter(Mandatory=$false, HelpMessage="Show computing time in milliseconds.")] 
     [switch]$t
 )
+    if ($h) {
+        Write-Help
+        return
+    }
+
     # Validate input.
     $validationResult = Validate-Input-Parameters -n $n -bs $bs -bt $bt -r $r -i $i
     if ($validationResult -ne $null) {
@@ -342,9 +347,30 @@ You need to provide arguments like this 'numberToConvert sourceBase targetBase'"
     $targetBase
 }
 
+Function Write-Help {
+    Write-Host '
+Usage: Convert-Base [-h] [-n number] [-bs source_base] [-bt target_base]
+                    [-r number source_base target_base] [-i] [-Verbose]
+					[-t] [-big]
+
+Options:
+    -h             Show help.
+    -n             Number to convert.
+    -bs base       Input number base.
+    -bt base       Output number base.
+    -r             Simple raw input (-r "FF 16 10").
+    -i             Interactive input mode. 
+                   You will be asked to write required arguments during runtime.
+    -Verbose       Verbose mode. Shows calculation steps.
+    -big           Show output uppercase.
+    -t             Show computing time in milliseconds.
+'
+}
+
 Function Run-Tests {
     Write-Host "Reference value: FF"
     Convert-Base -r '255 10 16' -big
+
 
     Write-Host "Reference value: 255"
     Convert-Base -r 'FF 16 10' -big

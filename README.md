@@ -17,11 +17,11 @@ Validace vstupu.
 Použité přepínače:
   - `-h` nápověda
   - `-n` číslo
-  - `-bs` soustava čísla
-  - `-bt` soustava čísla 2
+  - `-bs` původní soustava čísla
+  - `-bt` cílová soustava čísla
   - `-r` raw vstup: n bs bt
-  - `-i` interkaktivní mód
-  - `-v` ukecaný mód
+  - `-i` interaktivní mód
+  - `-Verbose` ukecaný mód
   - `-big` velké znaky výstupu
   - `-t` zobrazí celkový čas výpočtu (Pozor na mód verbose)
 
