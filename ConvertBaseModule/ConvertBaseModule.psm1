@@ -221,7 +221,7 @@ param (
 
     # Interactive mode disabled - require all arguments.
     if (-not $i) {
-        if ([string]::IsNullOrEmpty($r) -and ([string]::IsNullOrEmpty($n) -or [string]::IsNullOrEmpty($bs) -eq [string]::IsNullOrEmpty($bt))) {
+        if ([string]::IsNullOrEmpty($r) -and ([string]::IsNullOrEmpty($n) -or [string]::IsNullOrEmpty($bs) -or [string]::IsNullOrEmpty($bt))) {
             return 'You need to input all required arguments (number, source base and target base).
 Check help for details.'
         }
@@ -330,10 +330,9 @@ You need to provide arguments like this 'numberToConvert sourceBase targetBase'"
     for ($position = 0; $position -lt $number.Length; $position++) {
 		$char = $number.SubString($position, 1)
 		
-		#TODO: check if chat is in allowed (maybe hash map [$values[$char]] return null if char not exists)
 		$value = $values[$char];
 		
-		if($value -ge $sourceBase) {
+		if($value -notmatch '^\d+$' -or $value -ge $sourceBase) {
 			Write-Host -ForegroundColor Red "Input number is not valid for input base '$sourceBase'`nProblem with '$char' at postition $($position+1)"
 			return $null
 		}
@@ -351,7 +350,7 @@ Function Write-Help {
     Write-Host '
 Usage: Convert-Base [-h] [-n number] [-bs source_base] [-bt target_base]
                     [-r number source_base target_base] [-i] [-Verbose]
-					[-t] [-big]
+                    [-t] [-big]
 
 Options:
     -h             Show help.

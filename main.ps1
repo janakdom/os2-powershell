@@ -1,8 +1,3 @@
-﻿Import-Module ConvertBaseModule
+﻿Import-Module ConvertBaseModule -Force
 
-Convert-Base
-
-
-
-$CurrentValue = [Environment]::GetEnvironmentVariable("PSModulePath", "Machine")
-[Environment]::SetEnvironmentVariable("PSModulePath", $CurrentValue + [System.IO.Path]::PathSeparator + "D:\Skola\os2-powershell", "Machine")
+Convert-Base -n 255 -bs 10 -bt 16
