@@ -222,7 +222,7 @@ Check help for details.'
         }
     }
 
-    Write-Verbose "Input validation success."
+    Write-Verbose "Input parameters validation success."
     return $null
 }
 
@@ -232,11 +232,13 @@ param (
     [Parameter(Mandatory=$false, HelpMessage="Number to convert.")] 
     [string]$n,
 
-    [Parameter(Mandatory=$false, HelpMessage="Input number base.")] 
-    [int]$bs,
+    [Parameter(Mandatory=$false, HelpMessage="Input number base.")]
+    [AllowNull()]
+    [Nullable[System.Int32]]$bs,
 
-    [Parameter(Mandatory=$false, HelpMessage="Output number base.")] 
-    [int]$bt,
+    [Parameter(Mandatory=$false, HelpMessage="Output number base.")]
+    [AllowNull()]
+    [System.Nullable[System.Int32]]$bt,
 
     [Parameter(Mandatory=$false, HelpMessage="Simple raw input (-r 'FF 16 10').")] 
     [string]$r,
@@ -252,6 +254,11 @@ param (
     # Raw input enabled.
     if (-not [string]::IsNullOrEmpty($r)) {
         [System.Object[]]$raw = $r.Split(' ')
+        if ($raw.Count -ne 3) {
+            Write-Host -ForegroundColor Red "Wrong number of arguments for raw input!
+You need to provide arguments like this 'numberToConvert sourceBase targetBase'"
+            return $null
+        }
         [string]$rawNumber = $raw[0]
         [string]$rawSourceBase = $raw[1]
         [string]$rawTargetBase = $raw[2]
@@ -268,18 +275,38 @@ param (
         
         $number = $rawNumber
         $sourceBase = $rawSourceBase
-        $targetBase = $rawTargetBase
+        $targetBase = $rawTargetBase 
 
     } elseif ($i) {
-        # TODO Interactive input + flags.
+        if ([string]::IsNullOrEmpty($n)) {
+            $number = Read-Host -Prompt 'Please fill in number you want to convert'
+        } else {
+            $number = $n
+        }
+        if ($bs -eq $null) {
+            [System.String]$inputString = Read-Host -Prompt 'Please fill in source base from which you want to convert the number'
+            if ($inputString -notmatch '^\d+$') {
+                Write-Host -ForegroundColor Red 'Source base is not a number!'
+                return $null
+            }
+            $sourceBase = $inputString
+        } else {
+            $sourceBase = $bs
+        }
+        if ($bt -eq $null) {
+            [System.String]$inputString = Read-Host -Prompt 'Please fill in target base to which you want to convert the number'
+            if ($inputString -notmatch '^\d+$') {
+                Write-Host -ForegroundColor Red 'Target base is not a number!'
+                return $null
+            }
+            $targetBase = $inputString
+        } else {
+            $targetBase = $bt
+        }
     } else {
-        # TODO: Input from flags only.
-    }
-
-    # TODO: Validate number in range of base characters.
-    if ($false) {
-        Write-Host -ForegroundColor Red 'Number uses invalid characters for its base!'
-        return $null
+        $number = $n
+        $sourceBase = $bs
+        $targetBase = $bt
     }
 
     $minBase = 2
@@ -307,6 +334,8 @@ param (
 		}
 	}
 
+    Write-Verbose 'Input values validation success.'
+
     # Return 3 values at the end.
     $number
     $sourceBase
@@ -321,7 +350,7 @@ Function Run-Tests {
     Convert-Base -r 'FF 16 10' -big
     
     
-    Write-Host "Reference value: 255"
+    Write-Host "Reference value: AA"
     Convert-Base -r '10101010 2 16' -big
     
     Write-Host "Reference value: FF"
