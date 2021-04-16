@@ -128,7 +128,7 @@ Function Convert-ToDec {
     [bigint]$sum = 0
     [string]$out = ""
 
-    Write-Verbose "(char_value × base^position) + ..."
+    Write-Verbose "(char_value * base^position) + ..."
 
     for ($position = 0; $position -lt $number.Length; $position++) {
 		$char = $number.SubString($position, 1)
@@ -143,19 +143,24 @@ Function Convert-ToDec {
             Write-Host -ForegroundColor Yellow "Use char '$char' at position '$index' with value '$value'"
         }
 
-        $sum += $value * [bigint][math]::pow($from, $index)
+        [bigint]$power = 1
+        for ($i = 0; $i -lt $index; $i++) {
+            $power = $power * $from
+        }
+
+        $sum += $value * $power;
 
         if(-not [string]::IsNullOrEmpty($out)) {
             $out = "$out + "
         }
         
-        $out += "($value × $from^$index)"
+        $out += "($value * $from^$index)"
         
     }
     Write-Verbose "$out = $sum"
     Write-Verbose "$number($from) is $sum(10)"
     
-    return [string]$sum;
+    return $sum.ToString();
 }
 
 Function Convert-FromDec {
@@ -167,7 +172,7 @@ Function Convert-FromDec {
     )
 
     Write-Verbose "Converting from '10' to '$to' base"
-    Write-Verbose "number / base = floor_divide → remainder (converted_char)"
+    Write-Verbose "number / base = floor_divide => remainder (converted_char)"
 
     [bigint]$num = $number;
     [string]$out = "";
@@ -179,7 +184,7 @@ Function Convert-FromDec {
         $char = $allowed.Substring($remainder, 1)
         $out += $char
 
-        Write-Verbose "$num / $to = $divide → $remainder ($char)"
+        Write-Verbose "$num / $to = $divide => $remainder ($char)"
         $num = $divide
     }
 
