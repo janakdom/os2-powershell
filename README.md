@@ -52,6 +52,43 @@ $CurrentValue = [Environment]::GetEnvironmentVariable("PSModulePath", "Machine")
 [Environment]::SetEnvironmentVariable("PSModulePath", $CurrentValue + [System.IO.Path]::PathSeparator + "C:\Path\To\This\Repository", "Machine")
 ```
 
+## Příklady
+#### Tisk na konzoli
+```powershell
+Convert-Base -n FF -bs 16 -bt 2 -big
+#Output: 11111111
+```
+
+#### Uložení hodnoty do proměnné
+```powershell
+[string]$val = Convert-Base -n FF -bs 16 -bt 2 -big
+Write-Host $val
+#Output: 11111111
+```
+
+#### String jako parametr
+```powershell
+Convert-Base -r "FF 16 2" -big
+#Output: 11111111
+```
+
+#### Interaktivní mód
+```powershell
+Convert-Base -i
+#Please fill in number you want to convert: 
+FF
+#Please fill in source base from which you want to convert the number: 
+16
+#Please fill in target base to which you want to convert the number: 
+2
+#Output: 11111111
+```
+
+## Testy
+K projektu je přiložen testovací skript obsahující 21 108 testovacích případů, pro ověření funkcionality modulu.
+
+## Referenční nezávislý systém
+[www.rapidtables.com](https://www.rapidtables.com/convert/number/base-converter.html)
 
 ## Autoři
 
