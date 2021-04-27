@@ -10,33 +10,33 @@ $tests = @(
 [int]$err = 0;
 [int]$cntTests = $tests.length;
 [bool]$clear = $true;
- 
+
 Write-Host -ForegroundColor Yellow "Starting $($cntTests) tests..."
 
 Write-Host $tests
 
 foreach ($test in $tests)
 {
-  $input = $test[0]
+  $inputNumber = $test[0]
   $bs = $test[1]
   $bt = $test[2]
   $ref = $test[3]
 
-  [string]$res = Convert-Base -n $input -bs $bs -bt $bt -big
+  [string]$res = Convert-Base -n $inputNumber -bs $bs -bt $bt -big
 
   if($ref -ne $res) {
-    Write-Host -ForegroundColor Red "ERROR: Converted number '$($input)' in $($bs) to $($bt) base is incorrect!`n         Output:     $($res)`n         Reference:  $($ref)"
+    Write-Host -ForegroundColor Red "ERROR: Converted number '$($inputNumber)' in $($bs) to $($bt) base is incorrect!`n         Output:     $($res)`n         Reference:  $($ref)"
     $clear = $false
-    Convert-Base -n $input -bs $bs -bt $bt -big -Verbose
+    Convert-Base -n $inputNumber -bs $bs -bt $bt -big -Verbose
 
     $err++;
   }
-  
+
 
   $cnt++
   $perc = ([int]($cnt / $cntTests * 100))
   Write-Progress -Activity "Running $($cntTests) tests..." -Status "$($perc)% Complete" -PercentComplete $perc ;
-  
+
 }
 
 if($err -gt 0) {
