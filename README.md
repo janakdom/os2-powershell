@@ -1,8 +1,10 @@
 # Převodník číselných soustav
 
-CommandLet (Convert-Base): převodník bude umožňovat převádět libovolnou číslenou 
+CommandLet (Convert-Base): převodník bude umožňovat převádět libovolnou číslenou
 soustavu do libovolné číselné soustavy (2 - 36), nikoliv jen mezi základními (2, 8, 10, 16).
-Pro převod bude využívat 
+Pro ukládaní vstupních a výstupních čísel a práci s nimi je používán datový typ BigInt,
+a je tedy zajištěna dostatečná paměťová kapacita pro práci s opravdu velkými čísly.
+(Platí však, že čím nižžší soustava, tím menší číslo dokáže reprezantovat.)
 
 ## Motivace
 
@@ -12,7 +14,7 @@ Většina konvenčních nástrojů neumožňuje převod mezi nekonvenčními sou
 
 Převod mezi soustavami
 
-Validace vstupu. 
+Validace vstupu.
 
 Použité přepínače:
   - `-h` nápověda
@@ -38,7 +40,7 @@ Options:
     -bs base       Input number base.
     -bt base       Output number base.
     -r             Simple raw input (-r "FF 16 10").
-    -i             Interactive input mode. 
+    -i             Interactive input mode.
                    You will be asked to write required arguments during runtime.
     -Verbose       Verbose mode. Shows calculation steps.
     -big           Show output uppercase.
@@ -75,11 +77,11 @@ Convert-Base -r "FF 16 2" -big
 #### Interaktivní mód
 ```powershell
 Convert-Base -i
-#Please fill in number you want to convert: 
+#Please fill in number you want to convert:
 FF
-#Please fill in source base from which you want to convert the number: 
+#Please fill in source base from which you want to convert the number:
 16
-#Please fill in target base to which you want to convert the number: 
+#Please fill in target base to which you want to convert the number:
 2
 #Output: 11111111
 ```
